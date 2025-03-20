@@ -45,7 +45,6 @@ const sendEmail = async (booking) => {
 
   const sendSmtpEmail = {
     to: [
-      { email: booking.customeremail, name: booking.customername },
       { email: "stratoslux@gmail.com", name: "StratosLux" }
     ],
     sender: { email: process.env.SENDINBLUE_SENDER_EMAIL, name: "StratosLux" },
