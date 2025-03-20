@@ -22,12 +22,12 @@ const createTableQuery = `
   CREATE TABLE IF NOT EXISTS bookings (
     id SERIAL PRIMARY KEY,
     customerName TEXT NOT NULL,
-    customerEmail TEXT NOT NULL,
-    customerPhone TEXT NOT NULL,
-    preferredLocation TEXT NOT NULL,
-    serviceType TEXT NOT NULL,
-    preferredDate DATE NOT NULL,
-    preferredTime TIME NOT NULL,
+    customeremail TEXT NOT NULL,
+    customerphone TEXT NOT NULL,
+    preferredlocation TEXT NOT NULL,
+    servicetype TEXT NOT NULL,
+    preferreddate DATE NOT NULL,
+    preferredtime TIME NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 `;
@@ -45,7 +45,7 @@ const sendEmail = async (booking) => {
 
   const sendSmtpEmail = {
     to: [
-      { email: booking.customerEmail, name: booking.customerName },
+      { email: booking.customeremail, name: booking.customerName },
       { email: "stratoslux@gmail.com", name: "StratosLux" }
     ],
     sender: { email: process.env.SENDINBLUE_SENDER_EMAIL, name: "StratosLux" },
@@ -57,10 +57,10 @@ const sendEmail = async (booking) => {
            <p>Thank you for booking our service.</p>
            <p>Your booking details:</p>
            <ul>
-             <li>Service: ${booking.serviceType}</li>
-             <li>Location: ${booking.preferredLocation}</li>
-             <li>Date: ${booking.preferredDate}</li>
-             <li>Time: ${booking.preferredTime}</li>
+             <li>Service: ${booking.servicetype}</li>
+             <li>Location: ${booking.preferredlocation}</li>
+             <li>Date: ${booking.preferreddate}</li>
+             <li>Time: ${booking.preferredtime}</li>
            </ul>
            <p>Starting 03/21/2025 we will require a 30$ deposit to confirm the booking. This can be paid up to 12 hours before the scheduled appointment.</p>
            <p>We look forward to serving you.</p>
@@ -78,26 +78,26 @@ const sendEmail = async (booking) => {
 
 app.post("/api/bookings", async (req, res) => {
   const {
-    customerName,
-    customerEmail,
-    customerPhone,
-    preferredLocation,
-    serviceType,
-    preferredDate,
-    preferredTime
+    customername,
+    customeremail,
+    customerphone,
+    preferredlocation,
+    servicetype,
+    preferreddate,
+    preferredtime
   } = req.body;
 
-  if (!customerName || !customerEmail || !customerPhone || !preferredLocation || !serviceType || !preferredDate || !preferredTime) {
+  if (!customerName || !customeremail || !customerphone || !preferredlocation || !servicetype || !preferreddate || !preferredtime) {
     return res.status(400).json({ message: "Missing required booking fields" });
   }
 
   try {
     const insertQuery = `
-      INSERT INTO bookings (customerName, customerEmail, customerPhone, preferredLocation, serviceType, preferredDate, preferredTime)
+      INSERT INTO bookings (customerName, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `;
-    const values = [customerName, customerEmail, customerPhone, preferredLocation, serviceType, preferredDate, preferredTime];
+    const values = [customerName, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime];
     const result = await pool.query(insertQuery, values);
     console.log("Received booking:", result.rows[0]);
     console.log("Booking email:", result.rows[0]); 
