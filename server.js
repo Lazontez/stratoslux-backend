@@ -100,7 +100,7 @@ app.post("/api/bookings", async (req, res) => {
     const values = [customerName, customerEmail, customerPhone, preferredLocation, serviceType, preferredDate, preferredTime];
     const result = await pool.query(insertQuery, values);
     console.log("Received booking:", result.rows[0]);
-    console.log("Booking email:", booking.customerEmail); 
+    console.log("Booking email:", result.rows[0]); 
     sendEmail(result.rows[0]);
 
     res.status(200).json({ message: "Booking received successfully", booking: result.rows[0] });
