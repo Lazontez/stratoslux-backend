@@ -99,7 +99,7 @@ app.post("/api/bookings", async (req, res) => {
     `;
     const values = [customerName, customerEmail, customerPhone, preferredLocation, serviceType, preferredDate, preferredTime];
     const result = await pool.query(insertQuery, values);
-    
+    console.log('Results:', result)
     console.log("Received booking:", result.rows[0]);
 
     sendEmail(result.rows[0]);
