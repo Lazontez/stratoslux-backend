@@ -62,7 +62,7 @@ const sendEmail = async (booking) => {
              <li>Date: ${booking.preferredDate}</li>
              <li>Time: ${booking.preferredTime}</li>
            </ul>
-           <p>Starting 03/21/2025 we will require a 30$ deposit to confirm the booking. This can be paid up to 12 hour before the scheduled appointment.</p>
+           <p>Starting 03/21/2025 we will require a 30$ deposit to confirm the booking. This can be paid up to 12 hours before the scheduled appointment.</p>
            <p>We look forward to serving you.</p>
        </body>
        </html>`
@@ -99,7 +99,6 @@ app.post("/api/bookings", async (req, res) => {
     `;
     const values = [customerName, customerEmail, customerPhone, preferredLocation, serviceType, preferredDate, preferredTime];
     const result = await pool.query(insertQuery, values);
-    console.log('Results:', result)
     console.log("Received booking:", result.rows[0]);
 
     sendEmail(result.rows[0]);
