@@ -35,7 +35,7 @@ pool.query(createTableQuery)
   .then(() => console.log("Bookings table ensured"))
   .catch((err) => console.error("Error creating bookings table:", err));
 
-const sendEmail = async (booking) => {
+const sendCustomerEmail = async (booking) => {
   const defaultClient = SibApiV3Sdk.ApiClient.instance;
   const apiKey = defaultClient.authentications['api-key'];
   apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
@@ -44,7 +44,7 @@ const sendEmail = async (booking) => {
 
   const sendSmtpEmail = {
     to: [
-      { email: "stratoslux@gmail.com", name: "StratosLux" }
+      { email: booking.customeremail, name: booking.customername }
     ],
     sender: { email: process.env.SENDINBLUE_SENDER_EMAIL, name: "StratosLux" },
     subject: "Booking Confirmation",
@@ -68,9 +68,47 @@ const sendEmail = async (booking) => {
 
   try {
     const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("Email sent successfully:", data);
+    console.log("Customer email sent successfully:", data);
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending customer email:", error);
+  }
+};
+
+const sendBusinessNotificationEmail = async (booking) => {
+  const defaultClient = SibApiV3Sdk.ApiClient.instance;
+  const apiKey = defaultClient.authentications['api-key'];
+  apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
+
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+  const sendSmtpEmail = {
+    to: [
+      { email: "stratoslux@gmail.com", name: "StratosLux" }
+    ],
+    sender: { email: process.env.SENDINBLUE_SENDER_EMAIL, name: "StratosLux" },
+    subject: "New Booking Notification",
+    htmlContent: `<html>
+       <body>
+           <h1>New Booking Received</h1>
+           <p>A new booking has been submitted with the following details:</p>
+           <ul>
+             <li>Name: ${booking.customername}</li>
+             <li>Email: ${booking.customeremail}</li>
+             <li>Phone: ${booking.customerphone}</li>
+             <li>Service: ${booking.servicetype}</li>
+             <li>Location: ${booking.preferredlocation}</li>
+             <li>Date: ${new Date(booking.preferreddate).toLocaleDateString()}</li>
+             <li>Time: ${booking.preferredtime}</li>
+           </ul>
+       </body>
+       </html>`
+  };
+
+  try {
+    const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("Business notification email sent successfully:", data);
+  } catch (error) {
+    console.error("Error sending business notification email:", error);
   }
 };
 
@@ -102,8 +140,10 @@ app.post("/api/bookings", async (req, res) => {
 
     console.log("Received booking:", booking);
 
-    // Send confirmation email
-    sendEmail(booking);
+    // Send confirmation email to the customer
+    sendCustomerEmail(booking);
+    // Send notification email to the business
+    sendBusinessNotificationEmail(booking);
 
     res.status(200).json({
       message: "Booking received successfully",
