@@ -5,9 +5,7 @@ const { Pool } = require("pg");
 
 const app = express();
 
-app.use(cors({
-  origin: "https://stratosluxdetailing.com" 
-}));
+app.use(cors( { origin: ['https://stratosluxdetailing.com', 'https://www.stratosluxdetailing.com']}));
 
 app.use(express.json());
 
