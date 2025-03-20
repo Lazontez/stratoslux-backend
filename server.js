@@ -49,21 +49,26 @@ const sendCustomerEmail = async (booking) => {
     sender: { email: process.env.SENDINBLUE_SENDER_EMAIL, name: "StratosLux" },
     subject: "Booking Confirmation",
     htmlContent: `<html>
-       <body>
-           <h1>Booking Confirmed</h1>
-           <p>Dear ${booking.customername},</p>
-           <p>Thank you for booking our service.</p>
-           <p>Your booking details:</p>
-           <ul>
-             <li>Service: ${booking.servicetype}</li>
-             <li>Location: ${booking.preferredlocation}</li>
-             <li>Date: ${new Date(booking.preferreddate).toLocaleDateString()}</li>
-             <li>Time: ${booking.preferredtime}</li>
-           </ul>
-           <p>Starting 03/21/2025 we will require a $30 deposit to confirm the booking. This can be paid up to 12 hours before the scheduled appointment.</p>
-           <p>We look forward to serving you.</p>
-       </body>
-       </html>`
+  <body>
+    <h1>Booking Confirmed</h1>
+    <p>Dear ${booking.customername},</p>
+    <p>Thank you for booking our service.</p>
+    <p>Your booking details:</p>
+    <ul>
+      <li>Service: ${booking.servicetype}</li>
+      <li>Location: ${booking.preferredlocation}</li>
+      <li>Date: ${new Date(booking.preferreddate).toLocaleDateString()}</li>
+      <li>Time: ${booking.preferredtime}</li>
+    </ul>
+    <p>
+      Starting 03/21/2025 we will require a $30 deposit to confirm the booking. This can be paid up to 12 hours before the scheduled appointment.
+    </p>
+    <p>
+      <a href="https://square.link/u/XVGsCPJB" target="_blank" rel="noopener noreferrer">Deposit</a>
+    </p>
+    <p>We look forward to serving you.</p>
+  </body>
+</html>`
   };
 
   try {
@@ -136,13 +141,11 @@ app.post("/api/bookings", async (req, res) => {
     const values = [customername, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime];
     const result = await pool.query(insertQuery, values);
 
-    const booking = result.rows[0]; // Booking details from the database
+    const booking = result.rows[0]; 
 
     console.log("Received booking:", booking);
 
-    // Send confirmation email to the customer
     sendCustomerEmail(booking);
-    // Send notification email to the business
     sendBusinessNotificationEmail(booking);
 
     res.status(200).json({
