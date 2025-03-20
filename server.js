@@ -8,7 +8,6 @@ const SibApiV3Sdk = require("sib-api-v3-sdk");
 const app = express();
 
 app.use(cors({ origin: ['https://stratosluxdetailing.com', 'https://www.stratosluxdetailing.com'] }));
-
 app.use(express.json());
 
 const pool = new Pool({
