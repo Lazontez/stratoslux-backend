@@ -59,10 +59,10 @@ const sendEmail = async (booking) => {
            <ul>
              <li>Service: ${booking.servicetype}</li>
              <li>Location: ${booking.preferredlocation}</li>
-             <li>Date: ${booking.preferreddate}</li>
+             <li>Date: ${new Date(booking.preferreddate).toLocaleDateString()}</li>
              <li>Time: ${booking.preferredtime}</li>
            </ul>
-           <p>Starting 03/21/2025 we will require a 30$ deposit to confirm the booking. This can be paid up to 12 hours before the scheduled appointment.</p>
+           <p>Starting 03/21/2025 we will require a $30 deposit to confirm the booking. This can be paid up to 12 hours before the scheduled appointment.</p>
            <p>We look forward to serving you.</p>
        </body>
        </html>`
@@ -99,11 +99,27 @@ app.post("/api/bookings", async (req, res) => {
     `;
     const values = [customername, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime];
     const result = await pool.query(insertQuery, values);
-    console.log("Received booking:", result.rows[0]);
-    console.log("Booking email:", result.rows[0]); 
-    sendEmail(result.rows[0]);
 
-    res.status(200).json({ message: "Booking received successfully", booking: result.rows[0] });
+    const booking = result.rows[0]; // Booking details from the database
+
+    console.log("Received booking:", booking);
+
+    // Send confirmation email
+    sendEmail(booking);
+
+    res.status(200).json({
+      message: "Booking received successfully",
+      booking: {
+        id: booking.id,
+        customername: booking.customername,
+        customeremail: booking.customeremail,
+        customerphone: booking.customerphone,
+        preferredlocation: booking.preferredlocation,
+        servicetype: booking.servicetype,
+        preferreddate: booking.preferreddate,
+        preferredtime: booking.preferredtime
+      }
+    });
   } catch (error) {
     console.error("Error saving booking:", error);
     res.status(500).json({ message: "Internal server error" });
