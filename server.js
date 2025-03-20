@@ -21,7 +21,7 @@ const pool = new Pool({
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS bookings (
     id SERIAL PRIMARY KEY,
-    customerName TEXT NOT NULL,
+    customername TEXT NOT NULL,
     customeremail TEXT NOT NULL,
     customerphone TEXT NOT NULL,
     preferredlocation TEXT NOT NULL,
@@ -45,7 +45,7 @@ const sendEmail = async (booking) => {
 
   const sendSmtpEmail = {
     to: [
-      { email: booking.customeremail, name: booking.customerName },
+      { email: booking.customeremail, name: booking.customername },
       { email: "stratoslux@gmail.com", name: "StratosLux" }
     ],
     sender: { email: process.env.SENDINBLUE_SENDER_EMAIL, name: "StratosLux" },
@@ -53,7 +53,7 @@ const sendEmail = async (booking) => {
     htmlContent: `<html>
        <body>
            <h1>Booking Confirmed</h1>
-           <p>Dear ${booking.customerName},</p>
+           <p>Dear ${booking.customername},</p>
            <p>Thank you for booking our service.</p>
            <p>Your booking details:</p>
            <ul>
@@ -87,17 +87,17 @@ app.post("/api/bookings", async (req, res) => {
     preferredtime
   } = req.body;
 
-  if (!customerName || !customeremail || !customerphone || !preferredlocation || !servicetype || !preferreddate || !preferredtime) {
+  if (!customername || !customeremail || !customerphone || !preferredlocation || !servicetype || !preferreddate || !preferredtime) {
     return res.status(400).json({ message: "Missing required booking fields" });
   }
 
   try {
     const insertQuery = `
-      INSERT INTO bookings (customerName, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime)
+      INSERT INTO bookings (customername, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `;
-    const values = [customerName, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime];
+    const values = [customername, customeremail, customerphone, preferredlocation, servicetype, preferreddate, preferredtime];
     const result = await pool.query(insertQuery, values);
     console.log("Received booking:", result.rows[0]);
     console.log("Booking email:", result.rows[0]); 
