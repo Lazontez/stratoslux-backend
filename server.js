@@ -160,7 +160,21 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
+app.get("/api/bookings", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM bookings ORDER BY created_at DESC;");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+
+
