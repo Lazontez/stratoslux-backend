@@ -97,6 +97,7 @@ const sendBusinessNotificationEmail = async (booking) => {
              <li>Location: ${booking.preferredlocation}</li>
              <li>Date: ${new Date(booking.preferreddate).toLocaleDateString()}</li>
              <li>Time: ${booking.preferredtime}</li>
+             <li>Notes: ${booking.notes}</li>
            </ul>
        </body>
        </html>`
@@ -169,6 +170,47 @@ app.get("/api/bookings", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+app.put("/api/bookings/:id", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    await pool.query("UPDATE bookings SET status = $1 WHERE id = $2;", [status, id]);
+    res.json({ message: "Booking status updated successfully" });
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/api/available-days", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM available_days;");
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching available days:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.put("/api/available-days", async (req, res) => {
+  const { day_of_week, is_available } = req.body;
+
+  try {
+    await pool.query(
+      "INSERT INTO available_days (day_of_week, is_available) VALUES ($1, $2) ON CONFLICT (day_of_week) DO UPDATE SET is_available = EXCLUDED.is_available;",
+      [day_of_week, is_available]
+    );
+    res.json({ message: "Availability updated successfully" });
+  } catch (error) {
+    console.error("Error updating available days:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
