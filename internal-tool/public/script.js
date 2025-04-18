@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function updateStatus(id, status) {
   try {
-      const response = await fetch(`https://your-backend-url.onrender.com/api/bookings/${id}`, {
+      const response = await fetch(`https://stratoslux-backend.onrender.com/api/bookings/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status })
@@ -40,7 +40,7 @@ async function updateStatus(id, status) {
 
       if (response.ok) {
           alert("Status updated successfully!");
-          location.reload(); // Reload the page to reflect changes
+          location.reload(); 
       } else {
           alert("Failed to update status.");
       }

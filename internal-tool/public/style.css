@@ -3,14 +3,14 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light gray text */
+    background-color: #121212; 
+    color: #e0e0e0; 
 }
 
 .container {
     max-width: 1200px;
     margin: 20px auto;
-    background: #1e1e1e; /* Slightly lighter dark background */
+    background: #1e1e1e; 
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -19,32 +19,32 @@ body {
 h1 {
     text-align: center;
     margin-bottom: 20px;
-    color: #f5c518; /* Gold accent for headings */
+    color: #f5c518; 
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    background-color: #1e1e1e; /* Table background matches container */
+    background-color: #1e1e1e; 
 }
 
 table th, table td {
-    border: 1px solid #333; /* Darker border for table cells */
+    border: 1px solid #333; 
     padding: 8px;
     text-align: left;
-    color: #e0e0e0; /* Light gray text */
+    color: #e0e0e0; 
 }
 
 table th {
-    background-color: #2c2c2c; /* Slightly lighter header background */
-    color: #f5c518; /* Gold text for headers */
+    background-color: #2c2c2c; 
+    color: #f5c518; 
 }
 
 button {
     padding: 5px 10px;
-    background-color: #f5c518; /* Gold button background */
-    color: #121212; /* Dark text for contrast */
+    background-color: #f5c518; 
+    color: #121212; 
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -52,7 +52,7 @@ button {
 }
 
 button:hover {
-    background-color: #e0b000; /* Slightly darker gold on hover */
+    background-color: #e0b000; 
 }
 
 /* Responsive Styles */
