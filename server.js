@@ -7,13 +7,17 @@ const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 const app = express();
 
-app.use(cors({ 
+app.use(cors({
   origin: [
-    'https://stratosluxdetailing.com', 
-    'https://www.stratosluxdetailing.com', 
+    'https://stratosluxdetailing.com',
+    'https://www.stratosluxdetailing.com',
     'https://stratoslux-backend.onrender.com'
-  ] 
-}));app.use(express.json());
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
