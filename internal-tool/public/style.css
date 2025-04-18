@@ -96,3 +96,22 @@ button:hover {
         font-size: 10px;
     }
 }
+.filter-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.filter-container label {
+    font-size: 16px;
+    margin-right: 10px;
+    color: #e0e0e0; /* Light gray text */
+}
+
+.filter-container select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1e1e1e; /* Dark background */
+    color: #e0e0e0; /* Light gray text */
+}
