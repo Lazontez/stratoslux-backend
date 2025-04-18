@@ -209,6 +209,10 @@ app.put("/api/available-days", async (req, res) => {
   }
 });
 
+const path = require("path");
+
+app.use("/internal-tool", express.static(path.join(__dirname, "internal-tool/public")));
+
 
 
 
