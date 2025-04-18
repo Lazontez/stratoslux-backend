@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const bookingsTableBody = document.querySelector("#bookingsTable tbody");
 
   try {
-      const response = await fetch("https://your-backend-url.onrender.com/api/bookings");
+      const response = await fetch("https://stratoslux-backend.onrender.com/api/bookings");
       const bookings = await response.json();
 
       bookings.forEach(booking => {
